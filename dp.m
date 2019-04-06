@@ -1,4 +1,4 @@
-function [P, xc, df] = dp(T,NT,D,SS,sigmaM,sigmaE,betaM,betaE,puB,psB,w)
+function [P, xc, df] = dp(T,NT,D,SS,sigmaM,sigmaE,betaM,betaE,puB,psB,w,sigmaR) %#codegen
 %DP performs density propogation in circular space
 
 % Output:
@@ -44,6 +44,7 @@ for iSS = 1:nSS
     M{iSS} = Ddff * sigmaM(iSS) - Dder * diag(betaM(iSS) * df);
     E{iSS} = Ddff * sigmaE(iSS) - Dder * diag(betaE(iSS) * df);
 end
+R = Ddff * sigmaR;
 
 %% Mixture weights
 
@@ -75,6 +76,7 @@ end
 %guessing component
 U = ones(n,nTrials)/n;
 P = P * diag((1 - pU)) + U * diag(pU);
+P = expm(R) * P;
 
 function K = sd2k (S)
 % SD2K (S)

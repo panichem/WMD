@@ -7,9 +7,10 @@ betaM  = x((2 * nSS + 1):(3 * nSS));
 betaE  = x((3 * nSS + 1):(4 * nSS));
 puB    = x((4 * nSS + 1):(4 * nSS + 4));
 psB    = x((4 * nSS + 5):(4 * nSS + 8));
-w      = x((4 * nSS + 9):end);
+w      = x((4 * nSS + 9):end-1);
+sigmaR = x(end);
 
-[P, xc] = dp(T, NT, D, SS, sigmaM, sigmaE, betaM, betaE, puB, psB, w);
+[P, xc] = dp(T, NT, D, SS, sigmaM, sigmaE, betaM, betaE, puB, psB, w, sigmaR);
 [~, i] = min(abs(xc - R'),[],1); 
 ind = sub2ind(size(P),i,1:numel(T)); 
 p = P(ind);

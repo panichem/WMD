@@ -24,6 +24,7 @@ function res = dpFit(R,T,NT,D,SS,lo,hi)
 % res.pgB:     guessing coefficients [intercept setSize delay interaction]
 % res.psB:     swap coefficients [intercept setSize delay interaction]
 % res.wts:     weights for basis functions describing drift
+% res.sigmaR:  decoding/response error 
 %
 % Ref: Panichello MF, DePasquale B, Pillow JW, Buschman TJ.
 % Error-correcting dynamics in visual working memory.
@@ -35,16 +36,16 @@ uSS = unique(SS);
 nSS = numel(uSS);
 
 if ~exist('lo','var') || isempty(lo)
-    lo = zeros(1,4);
+    lo = zeros(1,5);
 end
 if ~exist('hi','var') || isempty(hi)
-    hi = ones(1,4);
+    hi = ones(1,5);
 end
 
 lb = [lo(1) * ones(nSS,1);  lo(2) * ones(nSS,1);  lo(3) * ones(nSS,1); ...
-    lo(4) * ones(nSS,1);  -.5 * ones(8,1); zeros(12,1)];
+    lo(4) * ones(nSS,1); -.5 * ones(8,1); zeros(13,1)];
 ub = [hi(1) * ones(nSS,1);  hi(2) * ones(nSS,1);  hi(3) * ones(nSS,1); ...
-    hi(4) * ones(nSS,1);   .5 * ones(8,1); ones(12,1)];
+    hi(4) * ones(nSS,1); .5 * ones(8,1); ones(13,1)];
 x0 = genX0(nIter,R,T,NT,D,SS,lb,ub);
 
 maxfeval = 10000;
@@ -79,5 +80,9 @@ res.betaM    = p((2 * nSS + 1):(3 * nSS));
 res.betaE    = p((3 * nSS + 1):(4 * nSS));
 res.pgB      = p((4 * nSS + 1):(4 * nSS + 4));
 res.psB      = p((4 * nSS + 5):(4 * nSS + 8));
-res.wts      = p((4 * nSS + 9):end);
+res.wts      = p((4 * nSS + 9):end-1);
 res.wts      = res.wts / sum(res.wts);
+res.sigmaR   = p(end);
+
+
+
