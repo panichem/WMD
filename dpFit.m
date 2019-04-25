@@ -11,8 +11,8 @@ function res = dpFit(R,T,NT,D,SS,lo,hi)
 % SS:      nTrials x 1 vector of set sizes
 %
 % Optional Input:
-% lo:       4 x 1 vector of lower bounds for [sigmaM sigmaE betaM betaE].
-% hi:       4 x 1 vector of upper bounds for [sigmaM sigmaE betaM betaE].
+% lo:       5 x 1 vector of lower bounds for [sigmaM sigmaE betaM betaE sigmaR].
+% hi:       5 x 1 vector of upper bounds for [sigmaM sigmaE betaM betaE sigmaR].
 %
 % Output:
 % res.nLL:     negative log likelihood of the model
@@ -43,9 +43,9 @@ if ~exist('hi','var') || isempty(hi)
 end
 
 lb = [lo(1) * ones(nSS,1);  lo(2) * ones(nSS,1);  lo(3) * ones(nSS,1); ...
-    lo(4) * ones(nSS,1); -.5 * ones(8,1); zeros(13,1)];
+    lo(4) * ones(nSS,1); -.5 * ones(8,1); zeros(12,1); lo(5)];
 ub = [hi(1) * ones(nSS,1);  hi(2) * ones(nSS,1);  hi(3) * ones(nSS,1); ...
-    hi(4) * ones(nSS,1); .5 * ones(8,1); ones(13,1)];
+    hi(4) * ones(nSS,1); .5 * ones(8,1); ones(12,1); hi(5)];
 x0 = genX0(nIter,R,T,NT,D,SS,lb,ub);
 
 maxfeval = 10000;
